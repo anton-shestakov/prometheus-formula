@@ -15,6 +15,7 @@ prometheus:
       - node_exporter
       - blackbox_exporter
       - consul_exporter
+      - php-fpm_exporter
       # - memcached_exporter  # not in upstream repo, only archive
 
   exporters:
@@ -171,6 +172,19 @@ prometheus:
             web.listen-address: ":9091"
             web.telemetry-path: "/metrics"
 
+      # Unoffical php fpm exporter config
+      php-fpm_exporter:
+        version: v0.6.1
+        archive:
+          official: false
+          tar: false
+          # yamllint disable-line rule:line-length
+          source: "https://github.com/bakins/php-fpm-exporter/releases/download/v0.6.1/php-fpm-exporter.linux.amd64"
+          source_hash: 40e52d84f7decb5fdad9fadacf63cb2de26ebddce56e11b20651555e8d6c6130
+        service:
+          args:
+            addr: ":9253"
+            fastcgi: "unix:///run/php/php-fpm.sock"
   linux:
     # 'Alternatives system' priority: zero disables (default)
     # yamllint disable-line rule:braces
