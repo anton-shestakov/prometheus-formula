@@ -15,6 +15,7 @@ prometheus:
       - node_exporter
       - blackbox_exporter
       - consul_exporter
+      - mysqld_exporter
       # - memcached_exporter  # not in upstream repo, only archive
 
   exporters:
@@ -97,6 +98,13 @@ prometheus:
         service:
           # This is to test that any fancy name we use, will work in archive mode
           name: my-fancy-consul-exporter-service
+
+      mysqld_exporter:
+        service:
+          args:
+            web.listen-address: 0.0.0.0:9192
+          env:
+            - 'DATA_SOURCE_NAME=foo:bar@/'
 
       prometheus:
         service:
