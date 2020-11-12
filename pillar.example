@@ -171,6 +171,11 @@ prometheus:
             web.listen-address: ":9091"
             web.telemetry-path: "/metrics"
 
+      mysqld_exporter:
+        service:
+          env:
+            - 'DATA_SOURCE_NAME=foo:bar@(localhost:3306)/'
+
   linux:
     # 'Alternatives system' priority: zero disables (default)
     # yamllint disable-line rule:braces
