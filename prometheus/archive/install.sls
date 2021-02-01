@@ -47,7 +47,7 @@ prometheus-archive-install-{{ name }}:
     {{- format_kwargs(p.pkg.component[name]['archive']) }}
     - trim_output: true
     - enforce_toplevel: false
-    - options: --strip-components=1
+    - options: {{ p.pkg.component[name]['archive'].get('options', '--strip-components=1') }}
     - force: {{ p.force }}
     - retry: {{ p.retry_option|json }}
     - require:
@@ -131,8 +131,9 @@ prometheus-archive-install-{{ name }}-managed-service:
         stop: ''
                {%- if name in ('node_exporter', 'consul_exporter') or 'config_file' not in p.pkg.component[name] %}
                  {%- set args = [] %}
+                 {%- set arg_prefix=p.pkg.component[name].get('service').get('arg_prefix', '--') %}
                  {%- for param, value in p.pkg.component.get(name).get('service').get('args', {}).items() %}
-                    {% do args.append("--" ~ param ~ "=" ~ value ) %}
+                    {% do args.append(arg_prefix ~ param ~ "=" ~ value ) %}
                  {%- endfor %}
         start: {{ p.pkg.component[name]['path'] }}/{{ name }} {{ args|join(' ') }}
                {%- else %}
